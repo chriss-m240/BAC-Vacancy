@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0
 
-pragma solidity >=0.6.0 <0.8.0;
+pragma solidity >=0.6.5 <0.8.5;
 
 /** 
  * @title Vacancy
@@ -8,10 +8,9 @@ pragma solidity >=0.6.0 <0.8.0;
  */
  
 import "@chainlink/contracts/src/v0.6/interfaces/AggregatorV3Interface.sol";
-import "./Authenticated.sol";
- 
-contract Vacancy is Authenticated {
-    address public admin;
+import "@openzeppelin/contracts/access/AccessControl.sol";
+
+contract Vacancy is AccessControl {
     string public name;
     string public description;
     uint public treshold;
@@ -28,6 +27,12 @@ contract Vacancy is Authenticated {
 
     // Oraculo
     AggregatorV3Interface internal priceFeed;
+    
+    //OpenZeppelin
+    bytes32 public constant USER = keccak256("USER");
+    bytes32 public constant EVALUATOR = keccak256("EVALUATOR");
+    bytes32 public constant ADMIN = keccak256("ADMIN");
+    
 
     struct Applicant {
         address payable applicant;
@@ -49,7 +54,7 @@ contract Vacancy is Authenticated {
     );
 
     constructor(string memory _name, string memory _description, uint _treshold) {
-        admin = msg.sender;
+        _setupRole(ADMIN, msg.sender);
         name = _name;
         description = _description;
         treshold = _treshold;
@@ -70,16 +75,16 @@ contract Vacancy is Authenticated {
     
     function registerAsUser(address _user) public {
         require(isOpen, "Vacancy is not open");
-        registeredUsers[_user] = true;
+        _setupRole(USER, _user);
         auxRegisteredUsers.push(_user);
     }
     
     function registerAsEvaluator(address _evaluator) public {
         require(isOpen, "Vacancy is not open");
-        evaluators[_evaluator] = true;
+        _setupRole(EVALUATOR, _evaluator);
     }
 
-    function addApplicant(string memory _name, string memory _bio, string memory _skillsAchievementsInfo, int256 _salary) public onlyRegisteredUser {
+    function addApplicant(string memory _name, string memory _bio, string memory _skillsAchievementsInfo, int256 _salary) public onlyRole(USER) {
         require(isOpen, "Vacancy is not open");
         require(!alreadyApplied[msg.sender], "Applicant has already applied");
         require(bytes(_name).length > 0);
@@ -93,7 +98,7 @@ contract Vacancy is Authenticated {
         emit ApplicantAdded(payable(msg.sender), _name, _bio, _skillsAchievementsInfo, 0, _salary);
     }
 
-    function evaluateUser(uint256 _id) public payable onlyEvaluator {
+    function evaluateUser(uint256 _id) public payable onlyRole(EVALUATOR) {
         require(isOpen, "Vacancy is not open");
         require(msg.value <= 100, "Evaluator can only assign at most 100 points");
         
@@ -108,7 +113,7 @@ contract Vacancy is Authenticated {
         applicants[vacancyVersion + _id] = _applicant;
     }
     
-    function openVacancy() public onlyAdmin {
+    function openVacancy() public onlyRole(ADMIN) {
         require(!isOpen, "Vacancy is already open");
 
         isOpen = true;
@@ -120,7 +125,7 @@ contract Vacancy is Authenticated {
         }
     }
     
-    function closeVacancy() public onlyAdmin {
+    function closeVacancy() public onlyRole(ADMIN) {
         isOpen = false;
     }
 }
