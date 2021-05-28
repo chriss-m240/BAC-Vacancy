@@ -137,7 +137,7 @@ export default {
       this.$modal.show("application-form");
     },
     next: function () {
-      if (this.applicants.length < 2) {
+      if (this.applicants.length < 1) {
         window.alert("Aplica con dos usuarios antes de continuar");
         return;
       }

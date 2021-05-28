@@ -68,13 +68,13 @@ contract Vacancy is Authenticated {
         return price;
     }
     
-    function registerUser(address _user) onlyAdmin public {
+    function registerAsUser(address _user) public {
         require(isOpen, "Vacancy is not open");
         registeredUsers[_user] = true;
         auxRegisteredUsers.push(_user);
     }
     
-    function addEvaluator(address _evaluator) onlyAdmin public {
+    function registerAsEvaluator(address _evaluator) public {
         require(isOpen, "Vacancy is not open");
         evaluators[_evaluator] = true;
     }

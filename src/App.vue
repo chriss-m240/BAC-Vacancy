@@ -24,9 +24,9 @@ export default {
       const web3 = window.web3;
       const networkId = await web3.eth.net.getId();
       const networkData = Vacancy.networks[networkId];
-            const accounts = await web3.eth.getAccounts();
+      const accounts = await web3.eth.getAccounts();
 
-      console.log(accounts)
+      console.log(accounts);
 
       if (networkData) {
         const vacancy = await new web3.eth.Contract(
