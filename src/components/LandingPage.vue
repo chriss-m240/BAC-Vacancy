@@ -31,8 +31,6 @@ export default {
   }),
 
   async mounted() {
-    const accounts = await web3.eth.getAccounts();
-    console.log(accounts);
     this.vacancy = await new web3.eth.Contract(
       Vacancy.abi,
       process.env.VUE_APP_CONTRACT_ADDRESS
@@ -115,6 +113,7 @@ a.custom-btn {
 a.custom-btn:hover {
   color: #ac3db9;
   border-color: #ac3db9;
+  cursor: pointer;
 }
 
 a.custom-btn:active {

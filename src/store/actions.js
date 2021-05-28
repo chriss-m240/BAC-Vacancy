@@ -37,7 +37,7 @@ const actions = {
             console.log("Tx hash", receipt);
             return false;
         } catch (err) {
-            console.log(err)
+            console.error(err)
             return true;
         }
     }

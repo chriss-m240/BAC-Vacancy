@@ -76,7 +76,6 @@ export default {
     );
 
     this.treshold = await this.vacancy.methods.treshold().call();
-    console.log(this.treshold)
   },
 
   methods: {
@@ -101,9 +100,7 @@ export default {
         const applicant = await this.vacancy.methods
           .applicants(i + parseInt(vacancyVersion))
           .call();
-        console.log(applicant)
         if (applicant.score >= this.treshold) {
-          console.log(applicant);
           this.applicants.push({
             name: applicant.name,
             bio: applicant.bio,

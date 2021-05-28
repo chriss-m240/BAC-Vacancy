@@ -24,17 +24,8 @@ export default {
       const web3 = window.web3;
       const networkId = await web3.eth.net.getId();
       const networkData = Vacancy.networks[networkId];
-      const accounts = await web3.eth.getAccounts();
 
-      console.log(accounts);
-
-      if (networkData) {
-        const vacancy = await new web3.eth.Contract(
-          Vacancy.abi,
-          process.env.VUE_APP_CONTRACT_ADDRESS
-        );
-        console.log(vacancy);
-      } else {
+      if (!networkData) {
         window.alert("Vacancy contract not deployed to detected network");
       }
     },

@@ -3,7 +3,6 @@ const mutations = {
         state.account = _account;
     },
     contract(state, _contract) {
-        console.log(_contract)
         state.contract = _contract;
     },
 };

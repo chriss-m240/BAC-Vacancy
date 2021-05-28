@@ -116,9 +116,6 @@ export default {
     const n = await this.vacancy.methods.applicantCount().call();
     const vacancyVersion = await this.vacancy.methods.vacancyVersion().call();
 
-    console.log(n);
-    console.log(vacancyVersion);
-
     for (let i = 1; i <= n; i++) {
       const applicant = await this.vacancy.methods
         .applicants(i + parseInt(vacancyVersion))
@@ -156,7 +153,6 @@ export default {
         tx: tx,
         isPayable: false,
       });
-      console.log(err);
       if (err) {
         this.$modal.hide("application-form");
         this.$modal.show("error");
@@ -169,8 +165,6 @@ export default {
         bio: this.bio,
         skillsAchievementsInfo: this.skillsAchievementsInfo,
       });
-
-      console.log(this.applicants);
     },
   },
 };

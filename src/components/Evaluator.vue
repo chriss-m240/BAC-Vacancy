@@ -94,7 +94,6 @@ export default {
       const applicant = await this.vacancy.methods
         .applicants(i + parseInt(vacancyVersion))
         .call();
-      console.log(applicant)
       this.applicants.push({
         name: applicant.name,
         bio: applicant.bio,
@@ -118,7 +117,6 @@ export default {
         value: this.score,
       });
 
-      console.log(err);
       if (err) {
         this.$modal.hide("evaluation");
         this.$modal.show("error");
